@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import re
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -117,14 +118,30 @@ class HBNBCommand(cmd.Cmd):
         """ Create an object of any class"""
         if not args:
             print("** class name missing **")
-            return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+        else:
+            attr = args.split()
+            c_name = attr[0]
+            c_dict = {}
+            if c_name not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
+            new_instance = HBNBCommand.classes[c_name]()
+            for item in attr[1:]:
+                c_item = item.split('=')
+                if c_item[1][0] == '"':
+                    c_item[1] = c_item[1].replace('"', '').replace('_', ' ')
+                    c_dict[c_item[0]] = c_item[1]
+                elif re.match(r'^[0-9]+$', c_item[1]):
+                    c_item[1] = int(c_item[1])
+                    c_dict[c_item[0]] = c_item[1]
+                elif re.match(r'^[+-]?[0-9]+\.[0-9]+$', c_item[1]):
+                    c_item[1] = float(c_item[1])
+                    c_dict[c_item[0]] = c_item[1]
+            for key in c_dict:
+                setattr(new_instance, key, c_dict[key])
+            storage.save()
+            print(new_instance.id)
+
 
     def help_create(self):
         """ Help information for the create method """
