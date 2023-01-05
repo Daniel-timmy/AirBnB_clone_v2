@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
+from models.amenity import Amenity
 from os import getenv
 from models.base_model import BaseModel, Base
 from sqlalchemy import String, Column, Integer, ForeignKey, Float, Table
@@ -8,14 +9,14 @@ from models.review import Review
 from models import storage
 
 place_amenity = Table('place_amenity', Base.metadata,
-                        Column('place_id', String(60),
-                               ForeignKey('places.id'),
-                               primary_key=True,
-                               nullable=False),
-                        Column('amenities_id', String(60),
-                               ForeignKey('amenities.id'),
-                               primary_key=True,
-                               nullable=False))
+                      Column('place_id', String(60),
+                             ForeignKey('places.id'),
+                             primary_key=True,
+                             nullable=False),
+                      Column('amenities_id', String(60),
+                             ForeignKey('amenities.id'),
+                             primary_key=True,
+                             nullable=False))
 
 
 class Place(BaseModel, Base):
@@ -47,25 +48,22 @@ class Place(BaseModel, Base):
     amenity_ids = []
 
     if getenv("HBNB_TYPE_STORAGE") == 'db':
-        reviews =\
-            relationship("Review", backref='place', cascade='all, delete, delete-orphan')
+        reviews = relationship("Review", backref='place', cascade='all, delete, delete-orphan')
         amenities = relationship('Amenity', secondary='place_amenity', viewonly=False)
+
     @property
     def reviews(self):
         """returns the list of Review instances"""
         review_dict = storage.all(Review)
         review_result = []
-
         for item in review_dict:
             if review_dict[item].place_id == self.id:
                 review_result.append(review_dict[item])
-
         return review_result
 
     @property
     def amenities(self):
         """returns the list of Amenity instances"""
-	from models.amenity import Amenity
         amenity_dict = storage.all(Amenity)
         amenity_result = []
         for key in amenity_dict:
@@ -76,7 +74,6 @@ class Place(BaseModel, Base):
     @amenities.setter
     def amenities(self, obj):
         """handles append method for adding
-         an Amenity.id to the attribute amenity_ids."""
-	from models.amenity import Amenity
+        an Amenity.id to the attribute amenity_ids."""
         if type(obj) is Amenity and obj.id not in self.amenity_ids:
             self.amenity_ids.append(obj.id)
