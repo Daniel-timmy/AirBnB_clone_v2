@@ -10,15 +10,15 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
+        dct = {}
         if cls is None:
             return self.__objects
         else:
-            c_name = cls.__name__ + '.'
-            dict_result = {}
+            c_name = cls.__name__
             for key in self.__objects:
                 if key.startswith(c_name):
-                    dict_result[key] = self.__objects[key]
-            return dict_result
+                    dct[key] = self.__objects[key]
+            return dct
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -26,9 +26,9 @@ class FileStorage:
 
     def save(self):
         """Saves storage dictionary to file"""
-        with open(self.__file_path, 'w') as f:
+        with open(FileStorage.__file_path, 'w') as f:
             temp = {}
-            temp.update(self.__objects)
+            temp.update(FileStorage.__objects)
             for key, val in temp.items():
                 temp[key] = val.to_dict()
             json.dump(temp, f)
@@ -44,26 +44,26 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-            'BaseModel': BaseModel, 'User': User, 'Place': Place,
-            'State': State, 'City': City, 'Amenity': Amenity,
-            'Review': Review
-        }
+                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
+                    'State': State, 'City': City, 'Amenity': Amenity,
+                    'Review': Review
+                  }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                    self.all()[key] = classes[val['__class__']](**val)
+                        self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
 
     def delete(self, obj=None):
-        """to delete obj from __objects"""
-        if obj is None:
-            return
-        else:
-            key = obj.to_dict()['__class__'] + '.' + obj.id
+        """To delete obj from inside __objects"""
+        if obj is not None:
+            c_name = type(obj).__name__ + '.' + obj.id
             try:
-                del self.__objects[key]
+                del self.__objects[c_name]
             except KeyError:
                 pass
+        else:
+            return
