@@ -10,7 +10,7 @@ fs = FileStorage()
 all_states = fs.all(State)
 print("All States: {}".format(len(all_states.keys())))
 for state_key in all_states.keys():
-    print(all_states[state_key])
+    print(all_states[state_key]._sa_instance_state)
 
 # Create a new State
 new_state = State()
@@ -40,9 +40,10 @@ for state_key in all_states.keys():
 
 # Delete the new State
 fs.delete(new_state)
-
-# All States
-all_states = fs.all(State)
-print("All States: {}".format(len(all_states.keys())))
-for state_key in all_states.keys():
-    print(all_states[state_key])
+# for state_key in all_states.keys():
+del all_states
+# # All States
+# all_states = fs.all(State)
+# print("All States: {}".format(len(all_states.keys())))
+# for state_key in all_states.keys():
+#     print(all_states[state_key])

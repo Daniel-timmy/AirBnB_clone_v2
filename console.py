@@ -139,9 +139,9 @@ class HBNBCommand(cmd.Cmd):
                     c_dict[c_item[0]] = c_item[1]
             for key in c_dict:
                 setattr(new_instance, key, c_dict[key])
-            storage.save()
+            new_instance.save()
             print(new_instance.id)
-            storage.save()
+            new_instance.save()
 
     def help_create(self):
         """ Help information for the create method """

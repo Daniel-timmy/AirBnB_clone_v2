@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session, relationship
 
 
 class DBStorage:
-    '''database storage engine for mysql storage'''
+    """database storage engine for mysql storage"""
     __engine = None
     __session = None
 
@@ -31,7 +31,6 @@ class DBStorage:
 
     def all(self, cls=None):
         """query on the current database session"""
-
         dict_result = {}
         classes = {'User': User, 'State': State, 'City': City, 'Amenity': Amenity, 'Place': Place, 'Review': Review}
 
