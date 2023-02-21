@@ -14,8 +14,8 @@ def do_pack():
         formatt = "%Y%m%d%H%M%S"
         datte = datetime.now().strftime(formatt)
 
-        file_name = "versions/web_static_{}".format(datte)
-        local('tar -czvf {} web_static'.format(file_name))
+        file_name = "versions/web_static_{}.tgz".format(datte)
+        local('tar -czvf {} web_static/'.format(file_name))
         return file_name
     except:
         return None
