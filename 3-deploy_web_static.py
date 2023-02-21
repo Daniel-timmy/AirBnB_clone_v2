@@ -17,7 +17,7 @@ def do_pack():
         datte = datetime.now().strftime(formatt)
 
         file_name = "versions/web_static_{}".format(datte)
-        local('tar -czvf {} web_static'.format(file_name))
+        local('tar -czvf {} web_static/'.format(file_name))
         return file_name
     except:
         return None
