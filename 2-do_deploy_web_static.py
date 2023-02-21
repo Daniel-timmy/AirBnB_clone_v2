@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Decompresses a folder"""
-import env as env
-from fabric.api import local, run, put
+from fabric.api import *
 import os
 
 env.hosts = ['34.234.204.132', '34.227.90.53']
