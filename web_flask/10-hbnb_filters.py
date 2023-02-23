@@ -14,7 +14,6 @@ def hbnb_filters():
     from models.amenity import Amenity
     amenities = storage.all(Amenity).values()
     states = storage.all(State).values()
-    city = storage.all(City).values()
     render_template('10-hbnb_filters.html', amenities=amenities, states=states)
 
 
