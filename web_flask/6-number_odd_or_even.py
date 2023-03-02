@@ -31,14 +31,13 @@ def display_python(text="is cool"):
     return "Python {}".format(text.replace("_", " "))
 
 
-@app.route('/number/<n>', strict_slashes=False)
+@app.route('/number/<int:n>', strict_slashes=False)
 def display_number(n):
     """displays an integer"""
-    if isinstance(n, int):
-        return '{} is a number'.format(n)
+    return "{:d} is a number".format(n)
 
 
-@app.route('/number/template/<n>', strict_slashes=False)
+@app.route('/number/template/<int:n>', strict_slashes=False)
 def number_template(n):
     """display an HTML page only if n is an integer"""
     if isinstance(n, int):
